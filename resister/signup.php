@@ -1,5 +1,15 @@
 <?php
-    $errors = [];
+
+//issetとemptyの違い
+    //  $hoge = '';
+
+    // // 空かどうかを調べる から = true
+    // var_dump(empty($hoge));
+
+    // // 変数が存在するかどうかのチェック　空じゃない = true
+    // var_dump(!isset($hoge));die();
+
+$errors = [];
 
     if (!empty($_POST)) {
         $name = $_POST['input_name'];
@@ -23,7 +33,22 @@
         elseif ($count < 4 || 16 < $count) {
             $errors['password'] = 'length';
         }
+        $errors['password'] = 'length';
+
+        $file_name =$_FILES['input_img_name']['name'];
+        if(!empty($file_name)){
+            $file_type = substr($file_name,-3);
+            $file_type = strtolower($file_type);
+            if($file_type != 'jpg'&& $file_type !='png' && $file_type !='gif'){
+                $errors['img_name'] = 'type';
+            }
+
+        }
+        else{
+            $errors['img_name']='blank';
+        }
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -66,7 +91,13 @@
                     </div>
                     <div class="form-group">
                         <label for="img_name">プロフィール画像</label>
-                        <input type="file" name="input_img_name" id="img_name">
+                        <input type="file" name="input_img_name" id="img_name" accept="image/*">
+                        <?php if(isset($errors['img_name']) && $errors['img_name'] == 'blank'){ ?>
+                            <p class="text-danger">画像を選択してください</p>
+                        <?php } ?>
+                        <?php if(isset($errors['img_name']) && $errors['img_name'] == 'type'){ ?>
+                            <p class="text-danger">拡張子がjpg png,gifにしてください</p>
+                        <?php } ?>
                     </div>
                     <input type="submit" class="btn btn-default" value="確認">
                     <a href="../signin.php" style="float: right; padding-top: 6px;" class="text-success">サインイン</a>
