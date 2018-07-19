@@ -11,6 +11,10 @@ $email = $_SESSION['register']['email'];
 $password = $_SESSION['register']['password'];
 $img_name = $_SESSION['register']['img_name'];
 
+if (!empty($_POST)) {
+    echo '通過テスト'.'<br>';
+}
+
 ?>
 
 <!DOCTYPE html>
