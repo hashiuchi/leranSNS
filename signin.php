@@ -1,15 +1,39 @@
 <?php
 // サインイン処理
+
+require('dbconnect.php');
+
+$errors = array();
+
 if(!empty($_POST)){
   $email = $_POST['input_email'];
   $password = $_POST['input_password'];
 
   if ($email != '' && $password != '') {
-    echo 'kakaka';
+    $sql = 'SELECT * FROM `users` WHERE `email`=?';
+    $data = [$email];
+    $stmt = $dbh->prepare($sql);
+    $stmt ->execute($data);
+    $record = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//何も入ってなかったらfalse
+    if ($record == false) {
+      $errors['signin'] = 'failed';
+    }
+//password_verifyは二つを比べる　合っていればtrue
+    if (password_verify($password,$record['password'])) {
+       //認証成功
+       $_SESSION['id'] = $record['id'];
+        header("Location: timeline.php");
+          exit();
+
+    }
+    else{
+      $errors['signin'] = 'failed';
+    }
   }
   else{
     $errors['signin'] = 'blank';
-    echo "afaa";
   }
 }
 ?>
@@ -28,6 +52,13 @@ if(!empty($_POST)){
       <div class="col-xs-8 col-xs-offset-2 thumbnail">
         <h2 class="text-center content_header">サインイン</h2>
         <form method="POST" action="" enctype="multipart/form-data">
+
+          <?php if (isset($errors['signin']) && $errors['signin'] == 'blank'){ ?>
+            <p class="text-danger">メールアドレスとパスワードを正しく入力して下さい</p>
+          <?php } ?>
+          <?php if(isset($errors['signin']) && $errors['signin'] == 'failed'): ?>
+              <p class="text-danger">サインインに失敗しました</p>
+            <?php endif; ?>
           <div class="form-group">
             <label for="email">メールアドレス</label>
             <input type="email" name="input_email" class="form-control" id="email" placeholder="example@gmail.com">
