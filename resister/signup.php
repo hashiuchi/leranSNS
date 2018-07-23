@@ -12,6 +12,7 @@
 session_start();
 
 date_default_timezone_set('Asia/Manila');
+
 $name = '';
 $email = '';
 $errors = [];
@@ -49,11 +50,12 @@ if (!empty($_POST)) {
     }
 
     $file_name = '';
+    //??? $GET[action]
     if (!isset($_GET['action'])) {
         $file_name =$_FILES['input_img_name']['name'];
     }
 
-
+//fpgかpngpngのたしかめ
     if(!empty($file_name)){
         $file_type = substr($file_name,-3);
         $file_type = strtolower($file_type);

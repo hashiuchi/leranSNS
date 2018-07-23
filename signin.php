@@ -1,6 +1,6 @@
 <?php
 // サインイン処理
-
+session_start();
 require('dbconnect.php');
 
 $errors = array();
