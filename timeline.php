@@ -3,6 +3,11 @@
 session_start();
 require('dbconnect.php');
 
+if (!isset($_SESSION['id'])) {
+    header('Location: signin.php');
+    exit();
+}
+
 $sql = 'SELECT * FROM `users` WHERE `id`=?';
 $data = array($_SESSION['id']);
 $stmt =$dbh->prepare($sql);
@@ -14,16 +19,16 @@ $errors =array();
 if(!empty($_POST)) {
     $feed = $_POST['feed'];
     if ($feed !='') {
-         $sql = 'INSERT INTO `feeds` SET `feed`=?, `user_id`=?, `created`=NOW()';
-            $data = array($feed, $signin_user['id']);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
- 
-            header('Location: timeline.php');
-            exit();
+       $sql = 'INSERT INTO `feeds` SET `feed`=?, `user_id`=?, `created`=NOW()';
+       $data = array($feed, $signin_user['id']);
+       $stmt = $dbh->prepare($sql);
+       $stmt->execute($data);
+
+       header('Location: timeline.php');
+       exit();
     }
     else{
-        $errors['blank'] = 'feed';
+    $errors['blank'] = 'feed';
     }
 }
 ?>
@@ -87,9 +92,9 @@ if(!empty($_POST)) {
       <form method="POST" action="">
         <div class="form-group">
           <textarea name="feed" class="form-control" rows="3" placeholder="Happy Hacking!" style="font-size: 24px;"></textarea><br>
-            <?php if(isset($errors['blank']) && $errors['blank'] == 'feed') { ?>
+          <?php if(isset($errors['blank']) && $errors['blank'] == 'feed') { ?>
             <p class="alert alert-danger">投稿して下さい</p>
-            <?php } ?>
+        <?php } ?>
     </div>
     <input type="submit" value="投稿する" class="btn btn-primary">
 </form>
