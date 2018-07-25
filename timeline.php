@@ -1,5 +1,7 @@
 <?php
 
+echo "string";
+
 session_start();
 require('dbconnect.php');
 
