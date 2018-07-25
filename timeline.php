@@ -1,7 +1,12 @@
-<?
-変更２
+
+
+
+
+<?php
+変更１
+
 プルリク
-dsfjdsfjsdffffja;sfjdkjads;fjafakdfjdks
+
 
 session_start();
 require('dbconnect.php');
